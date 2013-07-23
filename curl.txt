@@ -1,0 +1,11 @@
+# simulate github post-receive-hooks:
+# https://help.github.com/articles/post-receive-hooks 
+
+curl -X POST -H "Content-Type: application/json" --data @webhook.json http://localhost:3000/post
+
+
+# curl websocket connection: 
+curl -i -N -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: echo.websocket.org" -H "Origin:http://www.websocket.org" http://echo.websocket.org
+
+curl -i -N -H "Connection: Upgrade" -H "Upgrade: websocket" -H "Host: localhost:3001" -H "Origin:http://localhost:3001" http://localhost:3001
+

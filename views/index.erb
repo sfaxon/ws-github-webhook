@@ -1,0 +1,43 @@
+<div id='log'>
+  <h1>Git Commits</h1>
+  <div class='status'>Warming...</div>
+  <div class='items'></div>
+</div>
+<script type='text/javascript'>
+  ChatterBox = function(name, chat_window) {
+    $this = this
+    $this.name = name
+    this.el = $(chat_window)
+    this.socket = new WebSocket('ws://<%= request.host %>:3001')
+  
+    this.status = function(message) {
+      $this.el.find('.status').html(message)
+    }
+  
+    this.show = function(msg) {
+      $this.el.find('.items').append($("<p>").html(msg.repository.url))
+      msg.commits.forEach(function(entry) {
+        $this.el.find('.items').append($("<p>").html("<a href=" + entry.url + ">" + entry.message + "</a>"))
+      });
+      $this.el.find('.items').scrollTop(99999999)
+    }
+  
+    this.send_connect = function(message) {
+      this.send({ type: 'connect', content: message })
+    }
+  
+    this.socket.onopen = function(evt) {
+      $this.status("Connected")
+    }
+  
+    this.socket.onmessage = function(evt) {
+      return $this.show(JSON.parse(evt.data))
+    }
+  
+    this.socket.onclose = function(evt) {
+      $this.status('Disconnected')
+    }
+  }
+  
+  cb = new ChatterBox("GitHub History", $('#log'))
+</script>
